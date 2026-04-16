@@ -51,7 +51,7 @@ class ExpressPackage(Package):
     def get_type(self):
         return "Express"
 
-class PackageFactory:'
+class PackageFactory:
     @staticmethod
     def create_package(package_type, package_id, weight, sender, receiver)
         if package_type == "Standard":
@@ -97,10 +97,10 @@ class DeliveryService:
     def calculate_total_shipping_cost(self):
         total = 0
         for p in self._packages:
-            total += package.calculate_cost()
+            total += p.calculate_cost()
         return total
     def list_all_packages(self):
-        for p in self._packages
+        for p in self._packages:
             print (f"Package {p._package_id}, Status: {p.get_status()}, Type: {p.get_type()}")
 
     
