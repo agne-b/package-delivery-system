@@ -1,11 +1,16 @@
 from standard_package import StandardPackage
 from express_package import ExpressPackage
 from courier import Courier
+from data_manager import DataManager
 
 class DeliveryService:
     def __init__(self):
         self._packages = []
         self._couriers = []
+        self.packages = DataManager.load_packages()
+
+    def save_state(self):
+    DataManager.save_packages(self.packages)
 
     def add_courier(self, courier):
         self._couriers.append(courier)
