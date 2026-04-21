@@ -9,4 +9,6 @@ class DataManager:
   def save_packages(packages):
     with open(DataManager.FILE_NAME, mode="w", newline="") as file:
       writer = csv.writer(file)
+
+      
       
