@@ -17,6 +17,10 @@ class Package(ABC):
         self._receiver = receiver
         self._status = "Created"
 
+    @property
+    def package_id(self):
+        return self._package_id
+
     def get_status(self):
         return self._status
     
