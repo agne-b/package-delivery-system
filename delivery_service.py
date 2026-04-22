@@ -5,14 +5,15 @@ from data_manager import DataManager
 
 class DeliveryService:
     def __init__(self):
-        self._packages = []
         self._couriers = []
-        self.packages = DataManager.load_packages()
+        self._packages = DataManager.load_packages()
 
     def save_state(self):
-    DataManager.save_packages(self.packages)
+        DataManager.save_packages(self._packages)
 
     def add_courier(self, courier):
+        if courier in self._couriers:
+            raise ValueError("This courier already exists")
         self._couriers.append(courier)
 
     def create_standard_package(self, package_id, weight, sender, receiver):
@@ -26,14 +27,13 @@ class DeliveryService:
         return package
 
     def assign_package_to_courier(self, package, courier):
+        if courier not in self._couriers:
+            raise ValueError("Courier not registered in the system")
         courier.assign_package(package)
 
     def calculate_total_shipping_cost(self):
-        total = 0
-        for p in self._packages:
-            total += p.calculate_cost()
-        return total
+       return sum(p.calculate_cost() for p in self._packages)
 
     def list_all_packages(self):
         for p in self._packages:
-            print(f"Package {p._package_id}, Status: {p.get_status()}, Type: {p.get_type()}")
+            print(f"Package {p.package_id}, Status: {p.get_status()}, Type: {p.get_type()}")
