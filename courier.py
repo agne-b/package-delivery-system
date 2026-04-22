@@ -4,6 +4,7 @@ class Courier:
             raise ValueError("Courier name cannot be empty")
         if vehicle_capacity<=0:
             raise ValueError("Vehicle capacity must be positive")
+            
         self._name = name
         self._vehicle_capacity = vehicle_capacity
         self._assigned_packages = []
@@ -16,6 +17,7 @@ class Courier:
             raise ValueError("This package is already assigned to this courier")
         if self._current_load() + package._weight > self._vehicle_capacity:
             raise ValueError("Package exceeds courier vehicle capacity")
+            
         self._assigned_packages.append(package)
         package.update_status("Assigned to courier")
 
