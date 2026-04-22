@@ -12,6 +12,8 @@ class Package(ABC):
         return self._status
     
     def update_status(self, new_status):
+        if status == "Delivered":
+            raise ValueError("Cannot change delivered package")
         self._status = new_status
 
     @abstractmethod
