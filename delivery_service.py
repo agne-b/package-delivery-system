@@ -1,7 +1,6 @@
-from standard_package import StandardPackage
-from express_package import ExpressPackage
 from courier import Courier
 from data_manager import DataManager
+from package_factory import PackageFactory
 
 class DeliveryService:
     def __init__(self):
@@ -16,13 +15,16 @@ class DeliveryService:
             raise ValueError("This courier already exists")
         self._couriers.append(courier)
 
-    def create_standard_package(self, package_id, weight, sender, receiver):
-        package = StandardPackage(package_id, weight, sender, receiver)
-        self._packages.append(package)
-        return package
-
-    def create_express_package(self, package_id, weight, sender, receiver):
-        package = ExpressPackage(package_id, weight, sender, receiver)
+    def create_package(self, package_type, package_id, weight, sender, receiver):
+        if any(p.package_id == package_id for p in self._packages):
+            raise ValueError("This package ID already exists")
+        package = PackageFactory.create_package(
+            package_type,
+            package_id,
+            weight,
+            sender,
+            receiver,
+        )
         self._packages.append(package)
         return package
 
