@@ -5,14 +5,14 @@ def create_package_interactively():
   print("\n---- Create new package ----")
 
   while True:
-    package_id = input("Enter package ID: ")
+    package_id = input("Enter package ID: ").strip()
     if package_id:
       break
     else:
       print("Package ID cannot be empty")
 
   while True:
-    package_type = input("Enter package type (Standard/Express): ").capitalize()
+    package_type = input("Enter package type (Standard/Express): ").strip().capitalize()
     if package_type in ["Standard", "Express"]:
       break
     else:
@@ -29,14 +29,14 @@ def create_package_interactively():
       print("Invalid input! Please enter a number")
                      
   while True:
-    sender = input("Enter sender: ")
+    sender = input("Enter sender: ").strip()
     if sender:
       break
     else:
       print("Sender cannot be empty")
       
   while True:
-    receiver = input("Enter receiver: ")
+    receiver = input("Enter receiver: ").strip()
     if receiver:
       break
     else:
@@ -56,7 +56,7 @@ def show_packages(packages):
   for p in packages:
     print(
       f"ID:{p.package_id} Type:{p.get_type()} "
-      f"Weight:{p._weight} From:{p._sender} To:{p._receiver} "
+      f"Weight:{p.weight} From:{p.sender} To:{p.receiver} "
       f"Status:{p.get_status()} "
     )
 
@@ -66,9 +66,12 @@ def update_status(packages):
   for p in packages:
     if p.package_id == package_id:
       new_status = input("Enter new status: ")
-      p.update_status(new_status)
-      print("Status updated")
-      return
+      if new_status in ["Delivered", "Created", "Assigned to courier"]:
+        p.update_status(new_status)
+        print("Status updated")
+        return
+      else:
+        print("Invalid status!")
 
   print("Package not found")
 
@@ -82,7 +85,7 @@ def main():
     print("3. Update status")
     print("4. Save and exit")
 
-    choice = input("Choose option: ")
+    choice = input("Choose option: ").strip()
 
     if choice == "1":
       packages.append(create_package_interactively())
