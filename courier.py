@@ -10,12 +10,14 @@ class Courier:
         self._assigned_packages = []
 
     def _current_load(self):
-        return sum(package._weight for package in self._assigned_packages)
+        return sum(package.weight for package in self._assigned_packages)
 
     def assign_package(self, package):
+        if package is None:
+            raise ValueError("Package cannot be None")
         if package in self._assigned_packages:
             raise ValueError("This package is already assigned to this courier")
-        if self._current_load() + package._weight > self._vehicle_capacity:
+        if self._current_load() + package.weight > self._vehicle_capacity:
             raise ValueError("Package exceeds courier vehicle capacity")
             
         self._assigned_packages.append(package)
