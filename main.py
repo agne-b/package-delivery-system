@@ -65,13 +65,16 @@ def update_status(packages):
 
   for p in packages:
     if p.package_id == package_id:
-      new_status = input("Enter new status: ")
-      if new_status in ["Delivered", "Created", "Assigned to courier"]:
-        p.update_status(new_status)
-        print("Status updated")
-        return
-      else:
-        print("Invalid status!")
+
+      while True:
+        new_status = input("Enter new status: ").strip()
+        
+        if new_status in allowed_statuses:
+          p.update_status(new_status)
+          print("Status updated")
+          return
+        else:
+          print("Invalid status! Try again.")
 
   print("Package not found")
 
