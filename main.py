@@ -1,5 +1,35 @@
 from data_manager import DataManager
 from package_factory import PackageFactory
+from address import Address
+from package import Package
+
+def create_address(role):
+  print(f"\nEnter {role} address:")
+
+  while True:
+    street = input("Enter street: ").strip()
+    if street:
+      break
+    else:
+      print("Street cannot be empty")
+
+  while True:
+    city = input("Enter city: ").strip()
+    if city:
+      break
+    else:
+      print("City cannot be empty")
+
+  while True:
+    postal_code = input("Enter postal code: ").strip()
+    if postal_code:
+      break
+    else:
+      print("Postal code cannot be empty")
+
+  return Address(street, city, postal_code)
+      
+
 
 def create_package_interactively():
   print("\n---- Create new package ----")
@@ -28,22 +58,12 @@ def create_package_interactively():
     except ValueError:
       print("Invalid input! Please enter a number")
                      
-  while True:
-    sender = input("Enter sender: ").strip()
-    if sender:
-      break
-    else:
-      print("Sender cannot be empty")
-      
-  while True:
-    receiver = input("Enter receiver: ").strip()
-    if receiver:
-      break
-    else:
-      print("Receiver cannot be empty")
+
+  sender = create_address("sender")
+  receiver = create_address("receiver")
 
   package = PackageFactory.create_package(
-    package_type, package_id, weight, sender, receiver
+  package_type, package_id, weight, sender, receiver
   )
   print("Package created successfully")
   return package
@@ -63,6 +83,8 @@ def show_packages(packages):
 def update_status(packages):
   package_id = input("Enter package ID to update status: ")
 
+  allowed_statuses = Package.allowed_statuses
+
   for p in packages:
     if p.package_id == package_id:
 
@@ -75,7 +97,7 @@ def update_status(packages):
           return
         else:
           print("Invalid status! Try again.")
-
+     
   print("Package not found")
 
 def main():
