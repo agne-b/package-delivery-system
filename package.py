@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
+from address import Address
 
 class Package(ABC):
+
+    allowed_statuses = ["Created", "Assigned to courier", "Delivered"] 
+    
     def __init__(self, package_id, weight, sender, receiver):
         if not package_id:
             raise ValueError("Package ID cannot be empty")
@@ -10,14 +14,14 @@ class Package(ABC):
             raise ValueError("Package ID must be exactly 5 digits")
         if not package_id.isdigit():
             raise ValueError("Package ID must contain only digits")
+        if not isinstance(weight, (int, float)):
+            raise ValueError("Weight must be a number") 
         if weight <= 0:
             raise ValueError("Weight must be positive")
-        if not isinstance(weight, (int, float)):
-            raise ValueError("Weight must be a number")
-        if not sender:
-            raise ValueError("Sender cannot be empty")
-        if not receiver:
-            raise ValueError("Receiver cannot be empty")
+        if not isinstance(sender, Address):
+            raise ValueError("Sender must be an Address object")
+        if not isinstance(receiver, Address):
+            raise ValueError("Receiver must be an Address object")
             
         self._package_id = package_id
         self._weight = weight
@@ -31,8 +35,6 @@ class Package(ABC):
 
     @property
     def weight(self):
-        if self._weight <= 0:
-            raise ValueError("Weight must be positive")
         return self._weight
 
     @property
@@ -50,9 +52,7 @@ class Package(ABC):
         if self._status == "Delivered":
             raise ValueError("Cannot change delivered package")
 
-        allowed_statuses = ["Created", "Assigned to courier", "Delivered"]
-
-        if new_status not in allowed_statuses:
+        if new_status not in self.allowed_statuses:
             raise ValueError("Invalid status update")
                              
         self._status = new_status
