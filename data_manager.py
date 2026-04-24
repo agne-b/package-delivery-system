@@ -17,9 +17,9 @@ class DataManager:
             writer.writerow([
                 p.package_id,
                 p.get_type(),
-                p._weight,
-                p._sender,
-                p._receiver,
+                p.weight,
+                p.sender.get_full_address(),
+                p.receiver.get_full_address(),
                 p.get_status()
             ])
 
@@ -39,10 +39,21 @@ class DataManager:
                 package_id = row[0]
                 package_type = row[1]
                 weight = float(row[2])
-                sender = row[3]
-                receiver = row[4]
-                status = row[5]
 
+                sender_parts = row[3].split(",")
+                receiver_parts = row[4].split(",")
+
+                sender = Address(
+                    sender_parts[0].strip(),
+                    sender_parts[1].strip(),
+                    sender_parts[2].strip()
+                )
+
+                receiver = Address(
+                    receiver_parts[0].strip(),
+                    receiver_parts[1].strip(),
+                    receiver_parts[2].strip()
+                )
                 package = PackageFactory.create_package(
                     package_type,
                     package_id,
@@ -51,7 +62,7 @@ class DataManager:
                     receiver
                 )
 
-                package.update_status(status)
+                package.update_status(row[5])
                 packages.append(package)
 
             file.close()
