@@ -4,8 +4,16 @@ class Package(ABC):
     def __init__(self, package_id, weight, sender, receiver):
         if not package_id:
             raise ValueError("Package ID cannot be empty")
+        if not isinstance(package_id, str):
+            raise ValueError("Package ID must be a string")
+        if len(package_id) != 5:
+            raise ValueError("Package ID must be exactly 5 digits")
+        if not package_id.isdigit():
+            raise ValueError("Package ID must contain only digits")
         if weight <= 0:
             raise ValueError("Weight must be positive")
+        if not isinstance(weight, (int, float)):
+            raise ValueError("Weight must be a number")
         if not sender:
             raise ValueError("Sender cannot be empty")
         if not receiver:
