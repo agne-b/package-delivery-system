@@ -29,6 +29,20 @@ class Package(ABC):
     def package_id(self):
         return self._package_id
 
+    @property
+    def weight(self):
+        if self._weight <= 0:
+            raise ValueError("Weight must be positive")
+        return self._weight
+
+    @property
+    def sender(self):
+        return self._sender
+
+    @property
+    def receiver(self):
+        return self._receiver
+
     def get_status(self):
         return self._status
     
