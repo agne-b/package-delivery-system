@@ -4,7 +4,7 @@ from address import Address
 
 class TestPackage(unittest.TestCase):
 
-  def setup(self):
+  def setUp(self):
     self.sender = Address("Street 1", "City 1", "12345")
     self.receiver = Address("Street 2", "City 2", "56789")
     
@@ -14,11 +14,20 @@ class TestPackage(unittest.TestCase):
     self.assertEqual(package.weight, 2.5)
     self.assertEqual(package.get_status(), "Created")
 
-def test_invalid_package_id_letters(self):
-  with self.assertRaises(ValueError):
-    StandardPackage("12A45", 2.5, self.sender, self.receiver)
+  def test_invalid_package_id_letters(self):
+    with self.assertRaises(ValueError):
+      StandardPackage("12A45", 2.5, self.sender, self.receiver)
 
-def test_invalid_weight(self):
-  with self.assertRaises(ValueError):
-    StandardPackage("12345", -2.5, self.sender, self.receiver)
+  def test_invalid_weight(self):
+    with self.assertRaises(ValueError):
+      StandardPackage("12345", -2.5, self.sender, self.receiver)
+
+  def test_invalid_package_id_length(self):
+    with self.assertRaises(ValueError):
+        StandardPackage("1234", 2.5, self.sender, self.receiver)
+
+if __name__ == "__main__": 
+  unittest.main()
+
+
     
