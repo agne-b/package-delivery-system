@@ -72,7 +72,7 @@ The application is built using **object-oriented programming (OOP)** principles 
 
 ## UML Class Overview
 
-![UML Diagram](uml.jpg)
+![UML Diagram](uml.png)
 
 The system consists of the following main classes:
 
