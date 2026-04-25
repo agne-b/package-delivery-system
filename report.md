@@ -216,13 +216,249 @@ In this system, composition is used to build a `Package` using `Address` objects
 ### Example:
 
 ```python
-class Address:
-    def __init__(self, street, city, postal_code):
-        self._street = street
-        self._city = city
-        self._postal_code = postal_code
-        
-class Package:
-    def __init__(self, sender_address, receiver_address):
-        self.sender_address = Address(sender_address)
-        self.receiver_address = Address(receiver_address)
+from address import Address
+
+class Package(ABC):
+    def __init__(self, package_id, weight, sender, receiver):
+        self._package_id = package_id
+        self._weight = weight
+        self._sender = sender
+        self._receiver = receiver
+```
+
+---
+
+### Explanation:
+
+- The `Package` class contains `sender` and `receiver` attributes  
+- Both `sender` and `receiver` are instances of the `Address` class  
+- These `Address` objects are created outside the `Package` class and passed in as parameters  
+- The `Package` class stores and uses these objects as part of its structure  
+- This is a clear example of composition because the package is made up of address objects
+
+---
+
+### 2.6 Aggregation
+
+Aggregation is an object-oriented programming principle where one class contains references to objects of another class, but those objects can exist independently of the container class. It represents a weak “has-a” relationship.
+
+In this system, aggregation is used in the part of the program that manages multiple `Package` objects (for example, a manager or system class that stores packages in a list).
+
+---
+
+### Example:
+
+```python
+class DataManager:
+    @staticmethod
+    def load_packages():
+        packages = []
+class DeliveryService:
+    def __init__(self):
+        self._couriers = []
+        self._packages = DataManager.load_packages()
+```
+
+---
+
+### Explanation:
+
+- The `DeliveryService` class stores a list of couriers and packages  
+- The `_packages` attribute is initialized using `DataManager.load_packages()`  
+- The `DataManager` class is responsible for loading package data from a file  
+- The `DeliveryService` does not create `Package` objects itself  
+- Instead, it receives already created `Package` objects from `DataManager`  
+- These `Package` objects exist independently of the `DeliveryService` class  
+- The service class only keeps references to them and uses them when needed
+
+---
+
+### 2.7 Data Persistence
+
+Data persistence is the ability of a program to save data permanently so that it can be reused after the program is closed and restarted. In this system, data persistence is implemented using CSV file handling in the `DataManager` class.
+
+The system saves all package information into a file and later reloads it to restore the previous state of the application.
+
+---
+
+### Example:
+
+```python
+import csv
+
+class DataManager:
+    FILE_NAME = "packages.csv"
+
+    @staticmethod
+    def save_packages(packages):
+        file = open(DataManager.FILE_NAME, "w", newline="")
+        writer = csv.writer(file)
+
+        writer.writerow(["id", "type", "weight", "sender", "receiver", "status"])
+
+        for p in packages:
+            writer.writerow([
+                p.package_id,
+                p.get_type(),
+                p.weight,
+                p.sender.get_full_address(),
+                p.receiver.get_full_address(),
+                p.get_status()
+            ])
+
+        file.close()
+```
+
+---
+
+### Explanation:
+
+- The `save_packages()` method writes package data into a CSV file  
+- Each package object is converted into a row of structured text data  
+- Important attributes such as `package_id`, `type`, `weight`, `sender`, `receiver`, and `status` are stored  
+- The file is opened in write mode, meaning old data is replaced with new data  
+- This ensures the file always contains the latest version of the system data
+
+---
+
+### 2.8 Encapsulation
+
+Encapsulation is an object-oriented programming principle that restricts direct access to an object’s internal data and ensures that data is only accessed or modified through controlled methods.
+
+In this system, encapsulation is implemented by using private attributes (prefixed with `_`) and providing public methods or properties to access and modify them safely.
+
+---
+
+### Example:
+
+```python
+class Package(ABC):
+
+    def __init__(self, package_id, weight, sender, receiver):
+        self._package_id = package_id
+        self._weight = weight
+        self._sender = sender
+        self._receiver = receiver
+        self._status = "Created"
+
+    @property
+    def package_id(self):
+        return self._package_id
+
+    @property
+    def weight(self):
+        return self._weight
+
+    def get_status(self):
+        return self._status
+
+    def update_status(self, new_status):
+        if self._status == "Delivered":
+            raise ValueError("Cannot change delivered package")
+
+        self._status = new_status
+```
+
+---
+
+### Explanation:
+
+- Class attributes are marked as private using `_` (e.g. `_package_id`, `_weight`, `_status`)  
+- Direct access to internal variables is restricted from outside the class  
+- Data is accessed through controlled methods such as getters (`@property`)  
+- The `update_status()` method controls how the package status can be changed  
+- Validation logic is applied inside methods to protect data integrity  
+- This ensures that the object’s state cannot be changed in an unsafe way
+
+---
+
+### 2.9 Factory Method (Design Pattern)
+
+The Factory Method is a creational design pattern used to create objects without exposing the exact instantiation logic to the user. Instead of creating objects directly, a separate factory class is responsible for deciding which class to instantiate.
+
+In this system, the `PackageFactory` class is used to create different types of packages based on the provided input.
+
+---
+
+### Example:
+
+```python
+class PackageFactory:
+    @staticmethod
+    def create_package(package_type, package_id, weight, sender, receiver):
+        if package_type == "Standard":
+            return StandardPackage(package_id, weight, sender, receiver)
+        elif package_type == "Express":
+            return ExpressPackage(package_id, weight, sender, receiver)
+        else:
+            raise ValueError("Unknown package type")
+```
+
+---
+
+### Usage in DeliveryService:
+
+```python
+package = PackageFactory.create_package(
+    package_type,
+    package_id,
+    weight,
+    sender,
+    receiver
+)
+```
+
+---
+
+
+### Explanation:
+
+- The `PackageFactory` class is responsible for creating package objects  
+- It decides which class to instantiate based on `package_type` (`Standard` or `Express`)  
+- The `DeliveryService` class does not create package objects directly  
+- Instead, it calls the factory method to handle object creation  
+- This centralises and hides the object creation logic inside one class  
+- It makes the system easier to extend and maintain
+
+---
+
+## 3. Results and Summary
+
+- The application successfully implements a functional package delivery system using object-oriented programming principles.  
+- All core features work as expected, including package creation, status updates, and data persistence using CSV files.  
+- The system demonstrates proper use of OOP concepts such as inheritance, polymorphism, abstraction, encapsulation, composition, and aggregation.  
+- One of the main challenges was designing a clean class structure that separates responsibilities between different components.  
+- Another challenge was ensuring proper validation of input data to prevent invalid package creation and runtime errors.
+
+---
+
+## 4. Conclusions
+
+This coursework project successfully implemented a **Package Delivery System** using object-oriented programming principles in Python.
+
+The final system demonstrates a clear and structured design that models real-world logistics operations. It supports creating and managing different types of packages, tracking their status, and storing data persistently using file handling.
+
+The main achievement of this work is the correct application of OOP concepts, including inheritance, polymorphism, abstraction, encapsulation, composition, and aggregation. These principles helped to create a modular, reusable, and maintainable system.
+
+In terms of future improvements, the system could be extended by adding a graphical user interface (GUI), integrating a database instead of CSV files, or implementing real-time tracking features for deliveries. These enhancements would make the application more realistic and closer to a production-level system.
+
+---
+
+## 5. Resources and References
+
+- Python Official Documentation  
+  https://docs.python.org/3/
+
+- Python `abc` module (Abstract Base Classes)  
+  https://docs.python.org/3/library/abc.html
+
+- Python `csv` module documentation  
+  https://docs.python.org/3/library/csv.html
+
+- Factory Method Design Pattern  
+  https://refactoring.guru/design-patterns/factory-method
+
+- Course materials / lecture notes provided during the module 
+
+
+
