@@ -29,8 +29,6 @@ def create_address(role):
 
   return Address(street, city, postal_code)
       
-
-
 def create_package_interactively():
   print("\n---- Create new package ----")
 
@@ -58,10 +56,9 @@ def create_package_interactively():
     except ValueError:
       print("Invalid input! Please enter a number")
                      
-
   sender = create_address("sender")
   receiver = create_address("receiver")
-
+  
   package = PackageFactory.create_package(
   package_type, package_id, weight, sender, receiver
   )
