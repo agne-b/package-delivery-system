@@ -33,11 +33,16 @@ def create_package_interactively():
   print("\n---- Create new package ----")
 
   while True:
-    package_id = input("Enter package ID: ").strip()
-    if package_id:
-      break
+    package_id = input("Enter 5-digit package ID: ").strip()
+
+    if not package_id:
+        print("ID cannot be empty")
+    elif not package_id.isdigit():
+        print("ID must contain only numbers")
+    elif len(package_id) != 5:
+        print("ID must be exactly 5 digits")
     else:
-      print("Package ID cannot be empty")
+        break
 
   while True:
     package_type = input("Enter package type (Standard/Express): ").strip().capitalize()
