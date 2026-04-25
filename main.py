@@ -4,7 +4,7 @@ from address import Address
 from package import Package
 
 def create_address(role):
-  print(f"\nEnter {role} address:")
+  print(f"\n--- {role.upper()} ADDRESS ---")
 
   while True:
     street = input("Enter street: ").strip()
