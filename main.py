@@ -73,10 +73,12 @@ def show_packages(packages):
   for p in packages:
     print(
       f"ID:{p.package_id} Type:{p.get_type()} "
-      f"Weight:{p.weight} From:{p.sender} To:{p.receiver} "
-      f"Status:{p.get_status()} "
+      f"Weight:{p.weight}\n"
+      f"From:{p.sender.get_full_address()}\n"
+      f"To:{p.receiver.get_full_address()}\n"
+      f"Status:{p.get_status()}\n"
     )
-
+      
 def update_status(packages):
   package_id = input("Enter package ID to update status: ")
 
