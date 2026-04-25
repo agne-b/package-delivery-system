@@ -4,7 +4,7 @@ from address import Address
 
 class TestPackage(unittest.TestCase):
 
-  def create_sender_and_receiver(self):
+  def setup(self):
     self.sender = Address("Street 1", "City 1", "12345")
     self.receiver = Address("Street 2", "City 2", "56789")
     
