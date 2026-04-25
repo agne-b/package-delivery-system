@@ -2,7 +2,7 @@ import unittest
 from address import Address
 
 class TestPackageStatus(unittest.TestCase):
-  def create_sender_receiver_package(self):
+  def setup(self):
     sender = Address("Street 1", "City", "12345")
     receiver = Address("Street 2", "City", "56789")
     self.package = StandardPackage("11111", 1.0, sender, receiver)
