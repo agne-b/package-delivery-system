@@ -21,12 +21,17 @@ def create_address(role):
       print("City cannot be empty")
 
   while True:
-    postal_code = input("Enter postal code: ").strip()
-    if postal_code:
-      break
-    else:
-      print("Postal code cannot be empty")
+    postal_code = input("Enter 5-digit postal code: ").strip()
 
+    if not postal_code:
+        print("Postal code cannot be empty")
+    elif not postal_code.isdigit():
+        print("Postal code must contain only numbers")
+    elif len(postal_code) != 5:
+        print("Postal code must be exactly 5 digits")
+    else:
+        break
+      
   return Address(street, city, postal_code)
       
 def create_package_interactively():
@@ -130,7 +135,8 @@ def main():
       print("Saved! Goodbye. ")
 
     else:
-      print("Invalid choice")
+      print("Invalid choice. Please enter 1-4")
+      
 if __name__ == "__main__":
   main()
     
