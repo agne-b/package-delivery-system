@@ -1,5 +1,6 @@
 import unittest
 from standard_package import StandardPackage
+from address import Address
 
 class TestPackage(unittest.TestCase):
 
