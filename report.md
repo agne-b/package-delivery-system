@@ -224,6 +224,9 @@ class Package(ABC):
         self._weight = weight
         self._sender = sender
         self._receiver = receiver
+
+        sender = Address("Street 1", "City", "12345")
+        receiver = Address("Street 2", "City", "56789")
 ```
 
 ---
